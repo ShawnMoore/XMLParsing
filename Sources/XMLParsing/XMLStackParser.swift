@@ -100,7 +100,7 @@ internal class _XMLElement {
     fileprivate static func modifyElement(element: _XMLElement, parentElement: _XMLElement?, key: String?, object: NSDictionary) {
         element.attributes = (object[_XMLElement.attributesKey] as? [String: Any])?.mapValues({ String(describing: $0) }) ?? [:]
         
-        let objects: [(String, NSObject)] = object.flatMap({
+        let objects: [(String, NSObject)] = object.compactMap({
             guard let key = $0 as? String, let value = $1 as? NSObject, key != _XMLElement.attributesKey else { return nil }
             
             return (key, value)
@@ -126,7 +126,7 @@ internal class _XMLElement {
     }
     
     fileprivate static func createElement(parentElement: _XMLElement, key: String, object: NSArray) {
-        let objects = object.flatMap({ $0 as? NSObject })
+        let objects = object.compactMap({ $0 as? NSObject })
         objects.forEach({
             if let dict = $0 as? NSDictionary {
                 _XMLElement.createElement(parentElement: parentElement, key: key, object: dict)
@@ -163,7 +163,13 @@ internal class _XMLElement {
         for childElement in children {
             for child in childElement.value {
                 if let content = child.value {
-                    node[childElement.key] = content
+                    if let oldContent = node[childElement.key] as? Array<Any> {
+                        node[childElement.key] = oldContent + [content]
+                    } else if let oldContent = node[childElement.key] {
+                        node[childElement.key] = [oldContent, content]
+                    } else {
+                        node[childElement.key] = content
+                    }
                 } else if !child.children.isEmpty || !child.attributes.isEmpty {
                     let newValue = child.flatten()
                     
