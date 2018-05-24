@@ -324,15 +324,18 @@ extension _XMLDecoder : SingleValueDecodingContainer {
 // MARK: - Concrete Value Representations
 
 extension _XMLDecoder {
+    
     /// Returns the given value unboxed from a container.
     internal func unbox(_ value: Any, as type: Bool.Type) throws -> Bool? {
         guard !(value is NSNull) else { return nil }
         
-        guard let value = value as? String else { return nil }
+        guard let value = value as? String else {
+            return nil
+        }
         
-        if value == "true" || value == "1" {
+        if value.lowercased() == "true" || value == "1" {
             return true
-        } else if value == "false" || value == "0" {
+        } else if value.lowercased() == "false" || value == "0" {
             return false
         }
         
@@ -348,18 +351,7 @@ extension _XMLDecoder {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: string)
         }
         
-        let number = NSNumber(value: value)
-        
-        guard number !== kCFBooleanTrue, number !== kCFBooleanFalse else {
-            throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: value)
-        }
-        
-        let int = number.intValue
-        guard NSNumber(value: int) == number else {
-            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: self.codingPath, debugDescription: "Parsed XML number <\(number)> does not fit in \(type)."))
-        }
-        
-        return int
+        return Int(exactly: value)
     }
     
     internal func unbox(_ value: Any, as type: Int8.Type) throws -> Int8? {
@@ -371,18 +363,7 @@ extension _XMLDecoder {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: string)
         }
         
-        let number = NSNumber(value: value)
-        
-        guard number !== kCFBooleanTrue, number !== kCFBooleanFalse else {
-            throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: value)
-        }
-        
-        let int8 = number.int8Value
-        guard NSNumber(value: int8) == number else {
-            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: self.codingPath, debugDescription: "Parsed XML number <\(number)> does not fit in \(type)."))
-        }
-        
-        return int8
+        return Int8(exactly: value)
     }
     
     internal func unbox(_ value: Any, as type: Int16.Type) throws -> Int16? {
@@ -394,18 +375,7 @@ extension _XMLDecoder {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: string)
         }
         
-        let number = NSNumber(value: value)
-        
-        guard number !== kCFBooleanTrue, number !== kCFBooleanFalse else {
-            throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: value)
-        }
-        
-        let int16 = number.int16Value
-        guard NSNumber(value: int16) == number else {
-            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: self.codingPath, debugDescription: "Parsed XML number <\(number)> does not fit in \(type)."))
-        }
-        
-        return int16
+        return Int16(exactly: value)
     }
     
     internal func unbox(_ value: Any, as type: Int32.Type) throws -> Int32? {
@@ -417,18 +387,7 @@ extension _XMLDecoder {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: string)
         }
         
-        let number = NSNumber(value: value)
-        
-        guard number !== kCFBooleanTrue, number !== kCFBooleanFalse else {
-            throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: value)
-        }
-        
-        let int32 = number.int32Value
-        guard NSNumber(value: int32) == number else {
-            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: self.codingPath, debugDescription: "Parsed XML number <\(number)> does not fit in \(type)."))
-        }
-        
-        return int32
+        return Int32(exactly: value)
     }
     
     internal func unbox(_ value: Any, as type: Int64.Type) throws -> Int64? {
@@ -440,18 +399,7 @@ extension _XMLDecoder {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: string)
         }
         
-        let number = NSNumber(value: value)
-        
-        guard number !== kCFBooleanTrue, number !== kCFBooleanFalse else {
-            throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: value)
-        }
-        
-        let int64 = number.int64Value
-        guard NSNumber(value: int64) == number else {
-            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: self.codingPath, debugDescription: "Parsed XML number <\(number)> does not fit in \(type)."))
-        }
-        
-        return int64
+        return Int64(exactly: value)
     }
     
     internal func unbox(_ value: Any, as type: UInt.Type) throws -> UInt? {
@@ -463,18 +411,7 @@ extension _XMLDecoder {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: string)
         }
         
-        let number = NSNumber(value: value)
-        
-        guard number !== kCFBooleanTrue, number !== kCFBooleanFalse else {
-            throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: value)
-        }
-        
-        let uint = number.uintValue
-        guard NSNumber(value: uint) == number else {
-            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: self.codingPath, debugDescription: "Parsed XML number <\(number)> does not fit in \(type)."))
-        }
-        
-        return uint
+        return UInt(exactly: value)
     }
     
     internal func unbox(_ value: Any, as type: UInt8.Type) throws -> UInt8? {
@@ -486,18 +423,7 @@ extension _XMLDecoder {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: string)
         }
         
-        let number = NSNumber(value: value)
-        
-        guard number !== kCFBooleanTrue, number !== kCFBooleanFalse else {
-            throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: value)
-        }
-        
-        let uint8 = number.uint8Value
-        guard NSNumber(value: uint8) == number else {
-            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: self.codingPath, debugDescription: "Parsed XML number <\(number)> does not fit in \(type)."))
-        }
-        
-        return uint8
+        return UInt8(exactly: value)
     }
     
     internal func unbox(_ value: Any, as type: UInt16.Type) throws -> UInt16? {
@@ -509,18 +435,7 @@ extension _XMLDecoder {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: string)
         }
         
-        let number = NSNumber(value: value)
-        
-        guard number !== kCFBooleanTrue, number !== kCFBooleanFalse else {
-            throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: value)
-        }
-        
-        let uint16 = number.uint16Value
-        guard NSNumber(value: uint16) == number else {
-            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: self.codingPath, debugDescription: "Parsed XML number <\(number)> does not fit in \(type)."))
-        }
-        
-        return uint16
+        return UInt16(exactly: value)
     }
     
     internal func unbox(_ value: Any, as type: UInt32.Type) throws -> UInt32? {
@@ -532,18 +447,7 @@ extension _XMLDecoder {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: string)
         }
         
-        let number = NSNumber(value: value)
-        
-        guard number !== kCFBooleanTrue, number !== kCFBooleanFalse else {
-            throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: value)
-        }
-        
-        let uint32 = number.uint32Value
-        guard NSNumber(value: uint32) == number else {
-            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: self.codingPath, debugDescription: "Parsed XML number <\(number)> does not fit in \(type)."))
-        }
-        
-        return uint32
+        return UInt32(exactly: value)
     }
     
     internal func unbox(_ value: Any, as type: UInt64.Type) throws -> UInt64? {
@@ -555,18 +459,7 @@ extension _XMLDecoder {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: string)
         }
         
-        let number = NSNumber(value: value)
-        
-        guard number !== kCFBooleanTrue, number !== kCFBooleanFalse else {
-            throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: value)
-        }
-        
-        let uint64 = number.uint64Value
-        guard NSNumber(value: uint64) == number else {
-            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: self.codingPath, debugDescription: "Parsed XML number <\(number)> does not fit in \(type)."))
-        }
-        
-        return uint64
+        return UInt64(exactly: value)
     }
     
     internal func unbox(_ value: Any, as type: Float.Type) throws -> Float? {
@@ -574,30 +467,11 @@ extension _XMLDecoder {
         
         guard let string = value as? String else { return nil }
         
-        if let value = Double(string) {
-            let number = NSNumber(value: value)
-            
-            guard number !== kCFBooleanTrue, number !== kCFBooleanFalse else {
-                throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: value)
-            }
-            
-            let double = number.doubleValue
-            guard abs(double) <= Double(Float.greatestFiniteMagnitude) else {
-                throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: self.codingPath, debugDescription: "Parsed XML number \(number) does not fit in \(type)."))
-            }
-            
-            return Float(double)
-        } else if case let .convertFromString(posInfString, negInfString, nanString) = self.options.nonConformingFloatDecodingStrategy {
-            if string == posInfString {
-                return Float.infinity
-            } else if string == negInfString {
-                return -Float.infinity
-            } else if string == nanString {
-                return Float.nan
-            }
+        guard let value = Float(string) else {
+            throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: string)
         }
         
-        throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: value)
+        return value
     }
     
     internal func unbox(_ value: Any, as type: Double.Type) throws -> Double? {
@@ -605,24 +479,11 @@ extension _XMLDecoder {
         
         guard let string = value as? String else { return nil }
         
-        if let number = Decimal(string: string) as NSDecimalNumber? {
-            
-            guard number !== kCFBooleanTrue, number !== kCFBooleanFalse else {
-                throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: value)
-            }
-            
-            return number.doubleValue
-        } else if case let .convertFromString(posInfString, negInfString, nanString) = self.options.nonConformingFloatDecodingStrategy {
-            if string == posInfString {
-                return Double.infinity
-            } else if string == negInfString {
-                return -Double.infinity
-            } else if string == nanString {
-                return Double.nan
-            }
+        guard let value = Double(string) else {
+            throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: string)
         }
         
-        throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: value)
+        return value
     }
     
     internal func unbox(_ value: Any, as type: String.Type) throws -> String? {
