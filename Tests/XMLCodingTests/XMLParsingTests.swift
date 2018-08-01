@@ -72,5 +72,6 @@ class XMLParsingTests: XCTestCase {
 
     static var allTests = [
         ("testEmptyElement", testEmptyElement),
+        ("testEmptyElementNotEffectingPreviousElement", testEmptyElementNotEffectingPreviousElement),
     ]
 }
