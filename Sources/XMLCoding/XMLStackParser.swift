@@ -183,7 +183,8 @@ internal class _XMLElement {
                     } else {
                         node[childElement.key] = newValue
                     }
-                } else {
+                // if the node is empty and there is no existing value
+                } else if node[childElement.key] == nil {
                     // an empty node can be treated as an empty dictionary
                     node[childElement.key] = [:]
                 }

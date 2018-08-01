@@ -48,6 +48,27 @@ class XMLParsingTests: XCTestCase {
         XCTAssertNil(response.result.message)
     }
 
+    func testEmptyElementNotEffectingPreviousElement() throws {
+        let inputString = """
+            <Response>
+                <Result>
+                    <Message>message</Message>
+                </Result>
+                <Result/>
+                <Metadata>
+                    <Id>id</Id>
+                </Metadata>
+            </Response>
+            """
+        
+        guard let inputData = inputString.data(using: .utf8) else {
+            return XCTFail()
+        }
+        
+        let response = try XMLDecoder().decode(Response.self, from: inputData)
+        
+        XCTAssertEqual("message", response.result.message)
+    }
 
     static var allTests = [
         ("testEmptyElement", testEmptyElement),
