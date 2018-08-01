@@ -183,6 +183,9 @@ internal class _XMLElement {
                     } else {
                         node[childElement.key] = newValue
                     }
+                } else {
+                    // an empty node can be treated as an empty dictionary
+                    node[childElement.key] = [:]
                 }
             }
         }
