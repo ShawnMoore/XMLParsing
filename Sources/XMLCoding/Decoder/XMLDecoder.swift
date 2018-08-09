@@ -109,8 +109,9 @@ open class XMLDecoder {
         case preserveStructure
         
         /// Collapse the XML structure to avoid the outer type.
-        /// Useful when individual items will all listed under the one tag and
-        /// the added layer of the outer type is not useful.
+        /// Useful when individual items will all be listed under one tag;
+        /// the outer type will only include one list under this tag and can be
+        /// omitted.
         case collapseListUsingItemTag(String)
     }
     
