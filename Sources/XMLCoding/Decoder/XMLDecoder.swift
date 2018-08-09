@@ -102,6 +102,18 @@ open class XMLDecoder {
         case convertFromString(positiveInfinity: String, negativeInfinity: String, nan: String)
     }
     
+    /// The strategy to use when decoding lists.
+    public enum ListDecodingStrategy {
+        /// Preserves the XML structure, an outer type will contain lists
+        /// grouped under the tag used for individual items. This is the default strategy.
+        case preserveStructure
+        
+        /// Collapse the XML structure to avoid the outer type.
+        /// Useful when individual items will all listed under the one tag and
+        /// the added layer of the outer type is not useful.
+        case collapseListUsingItemTag(String)
+    }
+    
     /// The strategy to use in decoding dates. Defaults to `.secondsSince1970`.
     open var dateDecodingStrategy: DateDecodingStrategy = .secondsSince1970
     
@@ -111,6 +123,9 @@ open class XMLDecoder {
     /// The strategy to use in decoding non-conforming numbers. Defaults to `.throw`.
     open var nonConformingFloatDecodingStrategy: NonConformingFloatDecodingStrategy = .throw
     
+    /// The strategy to use in decoding lists. Defaults to `.preserveStructure`.
+    open var listDecodingStrategy: ListDecodingStrategy = .preserveStructure
+    
     /// Contextual user-provided information for use during decoding.
     open var userInfo: [CodingUserInfoKey : Any] = [:]
     
@@ -119,6 +134,7 @@ open class XMLDecoder {
         let dateDecodingStrategy: DateDecodingStrategy
         let dataDecodingStrategy: DataDecodingStrategy
         let nonConformingFloatDecodingStrategy: NonConformingFloatDecodingStrategy
+        let listDecodingStrategy: ListDecodingStrategy
         let userInfo: [CodingUserInfoKey : Any]
     }
     
@@ -127,6 +143,7 @@ open class XMLDecoder {
         return _Options(dateDecodingStrategy: dateDecodingStrategy,
                         dataDecodingStrategy: dataDecodingStrategy,
                         nonConformingFloatDecodingStrategy: nonConformingFloatDecodingStrategy,
+                        listDecodingStrategy: listDecodingStrategy,
                         userInfo: userInfo)
     }
     
@@ -610,4 +627,3 @@ extension _XMLDecoder {
         return decoded
     }
 }
-

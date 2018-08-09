@@ -174,6 +174,19 @@ open class XMLEncoder {
         case custom((Encoder) -> Bool)
     }
     
+    /// The strategy to use when encoding lists.
+    public enum ListEncodingStrategy {
+        /// Preserves the type structure. The CodingKey of the List will be used as
+        /// the tag for each individual item. This is the default strategy.
+        case preserveStructure
+        
+        /// Places the individual items of a list within the specified tag and the
+        /// CodingKey of the List becomes a single outer tag containing all items.
+        /// Useful for when you want the XML to have this structure but you don't
+        /// want the type structure to contain this additional wrapping layer.
+        case expandListWithItemTag(String)
+    }
+    
     /// The output format to produce. Defaults to `[]`.
     open var outputFormatting: OutputFormatting = []
     
@@ -195,6 +208,9 @@ open class XMLEncoder {
     /// The strategy to use in encoding strings. Defaults to `.deferredToString`.
     open var stringEncodingStrategy: StringEncodingStrategy = .deferredToString
     
+    /// The strategy to use in encoding lists. Defaults to `.preserveStructure`.
+    open var listEncodingStrategy: ListEncodingStrategy = .preserveStructure
+    
     /// Contextual user-provided information for use during encoding.
     open var userInfo: [CodingUserInfoKey : Any] = [:]
     
@@ -206,6 +222,7 @@ open class XMLEncoder {
         let keyEncodingStrategy: KeyEncodingStrategy
         let attributeEncodingStrategy: AttributeEncodingStrategy
         let stringEncodingStrategy: StringEncodingStrategy
+        let listEncodingStrategy: ListEncodingStrategy
         let userInfo: [CodingUserInfoKey : Any]
     }
     
@@ -217,6 +234,7 @@ open class XMLEncoder {
                         keyEncodingStrategy: keyEncodingStrategy,
                         attributeEncodingStrategy: attributeEncodingStrategy,
                         stringEncodingStrategy: stringEncodingStrategy,
+                        listEncodingStrategy: listEncodingStrategy,
                         userInfo: userInfo)
     }
     
@@ -317,8 +335,18 @@ internal class _XMLEncoder: Encoder {
         // If an existing unkeyed container was already requested, return that one.
         let topContainer: NSMutableArray
         if self.canEncodeNewValue {
-            // We haven't yet pushed a container at this level; do so here.
-            topContainer = self.storage.pushUnkeyedContainer()
+            switch options.listEncodingStrategy {
+            case .preserveStructure:
+                // We haven't yet pushed a container at this level; do so here.
+                topContainer = self.storage.pushUnkeyedContainer()
+            case .expandListWithItemTag(let itemTag):
+                // create an outer keyed container, with a new array as
+                // its sole entry
+                let outerContainer = self.storage.pushKeyedContainer()
+                let array = NSMutableArray()
+                outerContainer[itemTag] = array
+                topContainer = array
+            }
         } else {
             guard let container = self.storage.containers.last as? NSMutableArray else {
                 preconditionFailure("Attempt to push new unkeyed encoding container when already previously encoded at this path.")
