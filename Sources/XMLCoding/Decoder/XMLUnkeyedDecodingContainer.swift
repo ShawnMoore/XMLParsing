@@ -37,8 +37,16 @@ internal struct _XMLUnkeyedDecodingContainer : UnkeyedDecodingContainer {
         case .collapseListUsingItemTag(let itemTag):
             if container.count == 1,
                 let itemKeyMap = container[0] as? [AnyHashable: Any],
-                let list = itemKeyMap[itemTag] as? [Any] {
-                    self.container = list
+                let entry = itemKeyMap[itemTag] {
+                    // if there are multiple items in the list,
+                    // the entry will be a list
+                    if let list = entry as? [Any] {
+                        self.container = list
+                    } else {
+                        // otherwise it will be the singleton entry;
+                        // place it in a list for the container
+                        self.container = [entry]
+                    }
             } else {
                 self.container = []
             }
