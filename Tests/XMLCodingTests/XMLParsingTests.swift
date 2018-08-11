@@ -18,6 +18,17 @@ let LIST_XML = """
     </Response>
     """
 
+let SINGLETON_LIST_XML = """
+    <Response>
+        <Result />
+        <MetadataList>
+            <item>
+                <Id>id1</Id>
+            </item>
+        </MetadataList>
+    </Response>
+    """
+
 class XMLParsingTests: XCTestCase {
     struct Result: Codable {
         let message: String?
@@ -130,6 +141,22 @@ class XMLParsingTests: XCTestCase {
         XCTAssertEqual(LIST_XML, encodedString)
     }
     
+    func testSingletonListDecodingWithDefaultStrategy() throws {
+        guard let inputData = SINGLETON_LIST_XML.data(using: .utf8) else {
+            return XCTFail()
+        }
+        
+        let response = try XMLDecoder().decode(ResponseWithList.self, from: inputData)
+        
+        XCTAssertEqual(1, response.metadataList.items.count)
+        
+        // encode the output to make sure we get what we started with
+        let data = try XMLEncoder().encode(response, withRootKey: "Response")
+        let encodedString = String(data: data, encoding: .utf8) ?? ""
+        
+        XCTAssertEqual(SINGLETON_LIST_XML, encodedString)
+    }
+    
     func testListDecodingWithCollapseItemTagStrategy() throws {
         guard let inputData = LIST_XML.data(using: .utf8) else {
             return XCTFail()
@@ -150,11 +177,33 @@ class XMLParsingTests: XCTestCase {
         
         XCTAssertEqual(LIST_XML, encodedString)
     }
+    
+    func testSingletonListDecodingWithCollapseItemTagStrategy() throws {
+        guard let inputData = SINGLETON_LIST_XML.data(using: .utf8) else {
+            return XCTFail()
+        }
+        
+        let decoder = XMLDecoder()
+        decoder.listDecodingStrategy = .collapseListUsingItemTag("item")
+        let response = try decoder.decode(ResponseWithCollapsedList.self, from: inputData)
+        
+        XCTAssertEqual(1, response.metadataList.count)
+        
+        let encoder = XMLEncoder()
+        encoder.listEncodingStrategy = .expandListWithItemTag("item")
+        
+        // encode the output to make sure we get what we started with
+        let data = try encoder.encode(response, withRootKey: "Response")
+        let encodedString = String(data: data, encoding: .utf8) ?? ""
+        
+        XCTAssertEqual(SINGLETON_LIST_XML, encodedString)
+    }
 
     static var allTests = [
         ("testEmptyElement", testEmptyElement),
         ("testEmptyElementNotEffectingPreviousElement", testEmptyElementNotEffectingPreviousElement),
         ("testListDecodingWithDefaultStrategy", testListDecodingWithDefaultStrategy),
+        ("testSingletonListDecodingWithDefaultStrategy", testSingletonListDecodingWithDefaultStrategy),
         ("testListDecodingWithCollapseItemTagStrategy", testListDecodingWithCollapseItemTagStrategy)
     ]
 }
