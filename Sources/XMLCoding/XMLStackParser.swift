@@ -79,45 +79,61 @@ internal class _XMLElement {
         self.init(key: key, value: nil, attributes: attributes.mapValues({ $0.description }), children: children)
     }
     
-    static func createRootElement(rootKey: String, object: NSObject) -> _XMLElement? {
+    static func createRootElement(rootKey: String, header: XMLHeader?, options: XMLEncoder._Options, object: Container) throws -> Data {
         let element = _XMLElement(key: rootKey)
         
-        if let object = object as? NSDictionary {
-            _XMLElement.modifyElement(element: element, parentElement: nil, key: nil, object: object)
-        } else if let object = object as? NSArray {
-            _XMLElement.createElement(parentElement: element, key: rootKey, object: object)
+        switch object {
+        case .dictionary(let dictionary):
+            _XMLElement.modifyElement(element: element, parentElement: nil, key: nil, values: dictionary)
+        case .array(let array):
+            _XMLElement.createElement(parentElement: element, key: rootKey, object: array)
+        default:
+            throw EncodingError.invalidValue(object, EncodingError.Context(codingPath: [], debugDescription: "Top-level encoded as non-root XML fragment."))
         }
         
-        return element
+        return element.toXMLString(with: header, withCDATA: options.stringEncodingStrategy != .deferredToString).data(using: .utf8, allowLossyConversion: true)!
     }
     
-    fileprivate static func createElement(parentElement: _XMLElement?, key: String, object: NSDictionary) {
+    fileprivate static func createElement(parentElement: _XMLElement?, key: String, object: [String: Container]) {
         let element = _XMLElement(key: key)
         
-        modifyElement(element: element, parentElement: parentElement, key: key, object: object)
+        modifyElement(element: element, parentElement: parentElement, key: key, values: object)
     }
     
-    fileprivate static func modifyElement(element: _XMLElement, parentElement: _XMLElement?, key: String?, object: NSDictionary) {
-        element.attributes = (object[_XMLElement.attributesKey] as? [String: Any])?.mapValues({ String(describing: $0) }) ?? [:]
+    private static func modifyContainerElement(container: Container, element: _XMLElement, key: String) {
+        switch container {
+        case .dictionary(let values):
+            _XMLElement.createElement(parentElement: element, key: key, object: values)
+        case .array(let values):
+            _XMLElement.createElement(parentElement: element, key: key, object: values)
+        case .boolean(let value):
+            _XMLElement.createElement(parentElement: element, key: key, value: value)
+        case .string(let value):
+            _XMLElement.createElement(parentElement: element, key: key, value: value)
+        case .int64(let value):
+            _XMLElement.createElement(parentElement: element, key: key, value: value)
+        case .uint64(let value):
+            _XMLElement.createElement(parentElement: element, key: key, value: value)
+        case .double(let value):
+            _XMLElement.createElement(parentElement: element, key: key, value: value)
+        case .null:
+            _XMLElement.createNullElement(parentElement: element, key: key)
+        }
+    }
+    
+    private static func modifyElement(element: _XMLElement, parentElement: _XMLElement?, key: String?, values: [String: Container]) {
+        if let attributesContainer = values[_XMLElement.attributesKey], case let .dictionary(attributes) = attributesContainer {
+            element.attributes = attributes.mapValues({ String(describing: $0) })
+        }
         
-        let objects: [(String, NSObject)] = object.compactMap({
-            guard let key = $0 as? String, let value = $1 as? NSObject, key != _XMLElement.attributesKey else { return nil }
+        let filteredValues: [(String, Container)] = values.compactMap({
+            guard $0 != _XMLElement.attributesKey else { return nil }
             
-            return (key, value)
+            return ($0, $1)
         })
         
-        for (key, value) in objects {
-            if let dict = value as? NSDictionary {
-                _XMLElement.createElement(parentElement: element, key: key, object: dict)
-            } else if let array = value as? NSArray {
-                _XMLElement.createElement(parentElement: element, key: key, object: array)
-            } else if let string = value as? NSString {
-                _XMLElement.createElement(parentElement: element, key: key, object: string)
-            } else if let number = value as? NSNumber {
-                _XMLElement.createElement(parentElement: element, key: key, object: number)
-            } else {
-                _XMLElement.createElement(parentElement: element, key: key, object: NSNull())
-            }
+        for (key, value) in filteredValues {
+            modifyContainerElement(container: value, element: element, key: key)
         }
         
         if let parentElement = parentElement, let key = key {
@@ -125,34 +141,18 @@ internal class _XMLElement {
         }
     }
     
-    fileprivate static func createElement(parentElement: _XMLElement, key: String, object: NSArray) {
-        let objects = object.compactMap({ $0 as? NSObject })
-        objects.forEach({
-            if let dict = $0 as? NSDictionary {
-                _XMLElement.createElement(parentElement: parentElement, key: key, object: dict)
-            } else if let array = $0 as? NSArray {
-                _XMLElement.createElement(parentElement: parentElement, key: key, object: array)
-            } else if let string = $0 as? NSString {
-                _XMLElement.createElement(parentElement: parentElement, key: key, object: string)
-            } else if let number = $0 as? NSNumber {
-                _XMLElement.createElement(parentElement: parentElement, key: key, object: number)
-            } else {
-                _XMLElement.createElement(parentElement: parentElement, key: key, object: NSNull())
-            }
+    fileprivate static func createElement(parentElement: _XMLElement, key: String, object: [Container]) {
+        object.forEach({
+            modifyContainerElement(container: $0, element: parentElement, key: key)
         })
     }
-    
-    fileprivate static func createElement(parentElement: _XMLElement, key: String, object: NSNumber) {
-        let element = _XMLElement(key: key, value: object.description)
+
+    fileprivate static func createElement(parentElement: _XMLElement, key: String, value: CustomStringConvertible) {
+        let element = _XMLElement(key: key, value: value.description)
         parentElement.children[key] = (parentElement.children[key] ?? []) + [element]
     }
     
-    fileprivate static func createElement(parentElement: _XMLElement, key: String, object: NSString) {
-        let element = _XMLElement(key: key, value: object.description)
-        parentElement.children[key] = (parentElement.children[key] ?? []) + [element]
-    }
-    
-    fileprivate static func createElement(parentElement: _XMLElement, key: String, object: NSNull) {
+    fileprivate static func createNullElement(parentElement: _XMLElement, key: String) {
         let element = _XMLElement(key: key)
         parentElement.children[key] = (parentElement.children[key] ?? []) + [element]
     }

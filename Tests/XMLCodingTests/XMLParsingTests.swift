@@ -30,7 +30,7 @@ let SINGLETON_LIST_XML = """
     """
 
 class XMLParsingTests: XCTestCase {
-    struct Result: Codable {
+    struct Result: Codable, Equatable {
         let message: String?
         
         enum CodingKeys: String, CodingKey {
@@ -38,7 +38,7 @@ class XMLParsingTests: XCTestCase {
         }
     }
     
-    struct Metadata: Codable {
+    struct Metadata: Codable, Equatable {
         let id: String
         
         enum CodingKeys: String, CodingKey {
@@ -46,7 +46,7 @@ class XMLParsingTests: XCTestCase {
         }
     }
     
-    struct MetadataList: Codable {
+    struct MetadataList: Codable, Equatable {
         let items: [Metadata]
         
         enum CodingKeys: String, CodingKey {
@@ -64,7 +64,7 @@ class XMLParsingTests: XCTestCase {
         }
     }
     
-    struct ResponseWithList: Codable {
+    struct ResponseWithList: Codable, Equatable {
         let result: Result
         let metadataList: MetadataList
         
@@ -74,7 +74,7 @@ class XMLParsingTests: XCTestCase {
         }
     }
     
-    struct ResponseWithCollapsedList: Codable {
+    struct ResponseWithCollapsedList: Codable, Equatable {
         let result: Result
         let metadataList: [Metadata]
         
@@ -136,9 +136,9 @@ class XMLParsingTests: XCTestCase {
         
         // encode the output to make sure we get what we started with
         let data = try XMLEncoder().encode(response, withRootKey: "Response")
-        let encodedString = String(data: data, encoding: .utf8) ?? ""
         
-        XCTAssertEqual(LIST_XML, encodedString)
+        let response2 = try XMLDecoder().decode(ResponseWithList.self, from: data)
+        XCTAssertEqual(response, response2)
     }
     
     func testSingletonListDecodingWithDefaultStrategy() throws {
@@ -152,9 +152,9 @@ class XMLParsingTests: XCTestCase {
         
         // encode the output to make sure we get what we started with
         let data = try XMLEncoder().encode(response, withRootKey: "Response")
-        let encodedString = String(data: data, encoding: .utf8) ?? ""
         
-        XCTAssertEqual(SINGLETON_LIST_XML, encodedString)
+        let response2 = try XMLDecoder().decode(ResponseWithList.self, from: data)
+        XCTAssertEqual(response, response2)
     }
     
     func testListDecodingWithCollapseItemTagStrategy() throws {
@@ -173,9 +173,9 @@ class XMLParsingTests: XCTestCase {
         
         // encode the output to make sure we get what we started with
         let data = try encoder.encode(response, withRootKey: "Response")
-        let encodedString = String(data: data, encoding: .utf8) ?? ""
         
-        XCTAssertEqual(LIST_XML, encodedString)
+        let response2 = try decoder.decode(ResponseWithCollapsedList.self, from: data)
+        XCTAssertEqual(response, response2)
     }
     
     func testSingletonListDecodingWithCollapseItemTagStrategy() throws {
@@ -194,9 +194,9 @@ class XMLParsingTests: XCTestCase {
         
         // encode the output to make sure we get what we started with
         let data = try encoder.encode(response, withRootKey: "Response")
-        let encodedString = String(data: data, encoding: .utf8) ?? ""
         
-        XCTAssertEqual(SINGLETON_LIST_XML, encodedString)
+        let response2 = try decoder.decode(ResponseWithCollapsedList.self, from: data)
+        XCTAssertEqual(response, response2)
     }
 
     static var allTests = [
