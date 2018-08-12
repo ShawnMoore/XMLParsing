@@ -1,6 +1,8 @@
 import XCTest
-@testable import XMLParsingTests
 
-XCTMain([
-    testCase(XMLParsingTests.allTests),
-])
+import XMLCodingTests
+
+var tests = [XCTestCaseEntry]()
+tests += XMLCodingTests.__allTests()
+
+XCTMain(tests)

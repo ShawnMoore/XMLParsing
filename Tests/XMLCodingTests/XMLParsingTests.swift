@@ -3,7 +3,6 @@ import XCTest
 
 let LIST_XML = """
     <Response>
-        <Result />
         <MetadataList>
             <item>
                 <Id>id1</Id>
@@ -15,17 +14,18 @@ let LIST_XML = """
                 <Id>id3</Id>
             </item>
         </MetadataList>
+        <Result />
     </Response>
     """
 
 let SINGLETON_LIST_XML = """
     <Response>
-        <Result />
         <MetadataList>
             <item>
                 <Id>id1</Id>
             </item>
         </MetadataList>
+        <Result />
     </Response>
     """
 
@@ -87,10 +87,10 @@ class XMLParsingTests: XCTestCase {
     func testEmptyElement() throws {
         let inputString = """
             <Response>
-                <Result/>
                 <Metadata>
                     <Id>id</Id>
                 </Metadata>
+                <Result/>
             </Response>
             """
         
