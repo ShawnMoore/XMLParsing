@@ -250,8 +250,9 @@ open class XMLEncoder {
         guard let element = _XMLElement.createRootElement(rootKey: rootKey, object: topLevel) else {
             throw EncodingError.invalidValue(value, EncodingError.Context(codingPath: [], debugDescription: "Unable to encode the given top-level value to XML."))
         }
-        
-        return element.toXMLString(with: header, withCDATA: stringEncodingStrategy != .deferredToString).data(using: .utf8, allowLossyConversion: true)!
+
+        let withCDATA = stringEncodingStrategy != .deferredToString
+        return element.toXMLString(with: header, withCDATA: withCDATA, formatting: self.outputFormatting).data(using: .utf8, allowLossyConversion: true)!
     }
 }
 
