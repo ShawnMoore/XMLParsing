@@ -163,7 +163,15 @@ internal class _XMLElement {
         for childElement in children {
             for child in childElement.value {
                 if let content = child.value {
-                    node[childElement.key] = content
+                    if var arr = node[childElement.key] as? [Any] {
+                        arr.append(content)
+                        node[childElement.key] = arr
+                    } else if let v = node[childElement.key] {
+                        let arr: [Any] = [v, content]
+                        node[childElement.key] = arr
+                    } else {
+                        node[childElement.key] = content
+                    }
                 } else if !child.children.isEmpty || !child.attributes.isEmpty {
                     let newValue = child.flatten()
                     
