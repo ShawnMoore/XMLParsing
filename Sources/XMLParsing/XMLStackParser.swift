@@ -170,7 +170,11 @@ internal class _XMLElement {
                         let arr: [Any] = [v, content]
                         node[childElement.key] = arr
                     } else {
-                        node[childElement.key] = content
+                        if let type = node["type"] as? String, type == "array" {
+                            node[childElement.key] = [content]
+                        } else {
+                            node[childElement.key] = content
+                        }
                     }
                 } else if !child.children.isEmpty || !child.attributes.isEmpty {
                     let newValue = child.flatten()
