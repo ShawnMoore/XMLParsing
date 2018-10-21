@@ -582,7 +582,8 @@ extension _XMLDecoder {
         
         guard let string = value as? String else { return nil }
         
-        if let number = NSDecimalNumber(string: string) {
+        if let _ = Decimal(string: string) {
+            let number = NSDecimalNumber(string: string)
             
             guard number != 1, number != 0 else {
                 throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: value)
