@@ -348,15 +348,13 @@ extension _XMLDecoder {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: string)
         }
         
-        let number = NSNumber(value: value)
-        
-        guard number !== kCFBooleanTrue, number !== kCFBooleanFalse else {
+        guard value != 1, value != 0 else {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: value)
         }
         
-        let int = number.intValue
-        guard NSNumber(value: int) == number else {
-            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: self.codingPath, debugDescription: "Parsed XML number <\(number)> does not fit in \(type)."))
+        let int = Int(value)
+        guard Float(int) == value else {
+            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: self.codingPath, debugDescription: "Parsed XML number <\(value)> does not fit in \(type)."))
         }
         
         return int
@@ -371,15 +369,13 @@ extension _XMLDecoder {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: string)
         }
         
-        let number = NSNumber(value: value)
-        
-        guard number !== kCFBooleanTrue, number !== kCFBooleanFalse else {
+        guard value != 1, value != 0 else {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: value)
         }
         
-        let int8 = number.int8Value
-        guard NSNumber(value: int8) == number else {
-            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: self.codingPath, debugDescription: "Parsed XML number <\(number)> does not fit in \(type)."))
+        let int8 = Int8(value)
+        guard Float(int8) == value else {
+            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: self.codingPath, debugDescription: "Parsed XML number <\(value)> does not fit in \(type)."))
         }
         
         return int8
@@ -394,15 +390,13 @@ extension _XMLDecoder {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: string)
         }
         
-        let number = NSNumber(value: value)
-        
-        guard number !== kCFBooleanTrue, number !== kCFBooleanFalse else {
+        guard value != 1, value != 0 else {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: value)
         }
         
-        let int16 = number.int16Value
-        guard NSNumber(value: int16) == number else {
-            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: self.codingPath, debugDescription: "Parsed XML number <\(number)> does not fit in \(type)."))
+        let int16 = Int16(value)
+        guard Float(int16) == value else {
+            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: self.codingPath, debugDescription: "Parsed XML number <\(value)> does not fit in \(type)."))
         }
         
         return int16
@@ -417,15 +411,13 @@ extension _XMLDecoder {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: string)
         }
         
-        let number = NSNumber(value: value)
-        
-        guard number !== kCFBooleanTrue, number !== kCFBooleanFalse else {
+        guard value != 1, value != 0 else {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: value)
         }
         
-        let int32 = number.int32Value
-        guard NSNumber(value: int32) == number else {
-            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: self.codingPath, debugDescription: "Parsed XML number <\(number)> does not fit in \(type)."))
+        let int32 = Int32(value)
+        guard Float(int32) == value else {
+            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: self.codingPath, debugDescription: "Parsed XML number <\(value)> does not fit in \(type)."))
         }
         
         return int32
@@ -440,15 +432,13 @@ extension _XMLDecoder {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: string)
         }
         
-        let number = NSNumber(value: value)
-        
-        guard number !== kCFBooleanTrue, number !== kCFBooleanFalse else {
+        guard value != 1, value != 0 else {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: value)
         }
         
-        let int64 = number.int64Value
-        guard NSNumber(value: int64) == number else {
-            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: self.codingPath, debugDescription: "Parsed XML number <\(number)> does not fit in \(type)."))
+        let int64 = Int64(value)
+        guard Float(int64) == value else {
+            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: self.codingPath, debugDescription: "Parsed XML number <\(value)> does not fit in \(type)."))
         }
         
         return int64
@@ -463,15 +453,13 @@ extension _XMLDecoder {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: string)
         }
         
-        let number = NSNumber(value: value)
-        
-        guard number !== kCFBooleanTrue, number !== kCFBooleanFalse else {
+        guard value != 1, value != 0 else {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: value)
         }
         
-        let uint = number.uintValue
-        guard NSNumber(value: uint) == number else {
-            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: self.codingPath, debugDescription: "Parsed XML number <\(number)> does not fit in \(type)."))
+        let uint = UInt(value)
+        guard Float(uint) == value else {
+            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: self.codingPath, debugDescription: "Parsed XML number <\(value)> does not fit in \(type)."))
         }
         
         return uint
@@ -486,15 +474,13 @@ extension _XMLDecoder {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: string)
         }
         
-        let number = NSNumber(value: value)
-        
-        guard number !== kCFBooleanTrue, number !== kCFBooleanFalse else {
+        guard value != 1, value != 0 else {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: value)
         }
         
-        let uint8 = number.uint8Value
-        guard NSNumber(value: uint8) == number else {
-            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: self.codingPath, debugDescription: "Parsed XML number <\(number)> does not fit in \(type)."))
+        let uint8 = UInt8(value)
+        guard Float(uint8) == value else {
+            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: self.codingPath, debugDescription: "Parsed XML number <\(value)> does not fit in \(type)."))
         }
         
         return uint8
@@ -509,15 +495,13 @@ extension _XMLDecoder {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: string)
         }
         
-        let number = NSNumber(value: value)
-        
-        guard number !== kCFBooleanTrue, number !== kCFBooleanFalse else {
+        guard value != 1, value != 0 else {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: value)
         }
         
-        let uint16 = number.uint16Value
-        guard NSNumber(value: uint16) == number else {
-            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: self.codingPath, debugDescription: "Parsed XML number <\(number)> does not fit in \(type)."))
+        let uint16 = UInt16(value)
+        guard Float(uint16) == value else {
+            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: self.codingPath, debugDescription: "Parsed XML number <\(value)> does not fit in \(type)."))
         }
         
         return uint16
@@ -532,15 +516,13 @@ extension _XMLDecoder {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: string)
         }
         
-        let number = NSNumber(value: value)
-        
-        guard number !== kCFBooleanTrue, number !== kCFBooleanFalse else {
+        guard value != 1, value != 0 else {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: value)
         }
         
-        let uint32 = number.uint32Value
-        guard NSNumber(value: uint32) == number else {
-            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: self.codingPath, debugDescription: "Parsed XML number <\(number)> does not fit in \(type)."))
+        let uint32 = UInt32(value)
+        guard Float(uint32) == value else {
+            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: self.codingPath, debugDescription: "Parsed XML number <\(value)> does not fit in \(type)."))
         }
         
         return uint32
@@ -555,15 +537,13 @@ extension _XMLDecoder {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: string)
         }
         
-        let number = NSNumber(value: value)
-        
-        guard number !== kCFBooleanTrue, number !== kCFBooleanFalse else {
+        guard value != 1, value != 0 else {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: value)
         }
         
-        let uint64 = number.uint64Value
-        guard NSNumber(value: uint64) == number else {
-            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: self.codingPath, debugDescription: "Parsed XML number <\(number)> does not fit in \(type)."))
+        let uint64 = UInt64(value)
+        guard Float(uint64) == value else {
+            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: self.codingPath, debugDescription: "Parsed XML number <\(value)> does not fit in \(type)."))
         }
         
         return uint64
@@ -575,18 +555,15 @@ extension _XMLDecoder {
         guard let string = value as? String else { return nil }
         
         if let value = Double(string) {
-            let number = NSNumber(value: value)
-            
-            guard number !== kCFBooleanTrue, number !== kCFBooleanFalse else {
+            guard value != 1, value != 0 else {
                 throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: value)
             }
             
-            let double = number.doubleValue
-            guard abs(double) <= Double(Float.greatestFiniteMagnitude) else {
-                throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: self.codingPath, debugDescription: "Parsed XML number \(number) does not fit in \(type)."))
+            guard abs(value) <= Double(Float.greatestFiniteMagnitude) else {
+                throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: self.codingPath, debugDescription: "Parsed XML number \(value) does not fit in \(type)."))
             }
             
-            return Float(double)
+            return Float(value)
         } else if case let .convertFromString(posInfString, negInfString, nanString) = self.options.nonConformingFloatDecodingStrategy {
             if string == posInfString {
                 return Float.infinity
@@ -607,7 +584,7 @@ extension _XMLDecoder {
         
         if let number = Decimal(string: string) as NSDecimalNumber? {
             
-            guard number !== kCFBooleanTrue, number !== kCFBooleanFalse else {
+            guard number != 1, number != 0 else {
                 throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: value)
             }
             
