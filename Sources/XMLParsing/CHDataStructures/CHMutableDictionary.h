@@ -12,6 +12,8 @@
 
 #import "Util.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 HIDDEN void createCollectableCFMutableDictionary(CFMutableDictionaryRef* dictionary, NSUInteger initialCapacity);
 
 /**
@@ -45,3 +47,5 @@ HIDDEN void createCollectableCFMutableDictionary(CFMutableDictionaryRef* diction
 - (void) setObject:(id)anObject forKey:(id)aKey;
 
 @end
+
+NS_ASSUME_NONNULL_END
