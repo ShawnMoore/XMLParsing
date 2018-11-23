@@ -21,6 +21,14 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		B3C3F0CC21A88F89000DC7C8 /* CHMutableDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = B3C3F0CA21A88F89000DC7C8 /* CHMutableDictionary.m */; };
+		B3C3F0CD21A88F89000DC7C8 /* CHMutableDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = B3C3F0CA21A88F89000DC7C8 /* CHMutableDictionary.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		B3C3F0D021A88FDF000DC7C8 /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = B3C3F0CF21A88FDF000DC7C8 /* Util.m */; };
+		B3C3F0D121A88FDF000DC7C8 /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = B3C3F0CF21A88FDF000DC7C8 /* Util.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		B3C3F0D421A88FF1000DC7C8 /* CHCircularBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = B3C3F0D321A88FF0000DC7C8 /* CHCircularBuffer.m */; };
+		B3C3F0D521A88FF1000DC7C8 /* CHCircularBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = B3C3F0D321A88FF0000DC7C8 /* CHCircularBuffer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		B3C3F0D821A88FFD000DC7C8 /* CHOrderedDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = B3C3F0D621A88FFD000DC7C8 /* CHOrderedDictionary.m */; };
+		B3C3F0D921A88FFD000DC7C8 /* CHOrderedDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = B3C3F0D621A88FFD000DC7C8 /* CHOrderedDictionary.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		OBJ_35 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
 		OBJ_41 /* XMLParsingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_25 /* XMLParsingTests.swift */; };
 		OBJ_43 /* XMLParsing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "XMLParsing::XMLParsing::Product" /* XMLParsing.framework */; };
@@ -57,6 +65,15 @@
 
 /* Begin PBXFileReference section */
 		8420DF4021761DF200757ECF /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Sources/XMLParsing/Info.plist; sourceTree = "<group>"; };
+		B3C3F0C921A88F88000DC7C8 /* XMLParsing-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XMLParsing-Bridging-Header.h"; sourceTree = "<group>"; };
+		B3C3F0CA21A88F89000DC7C8 /* CHMutableDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHMutableDictionary.m; sourceTree = "<group>"; };
+		B3C3F0CB21A88F89000DC7C8 /* CHMutableDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHMutableDictionary.h; sourceTree = "<group>"; };
+		B3C3F0CE21A88FDF000DC7C8 /* Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
+		B3C3F0CF21A88FDF000DC7C8 /* Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Util.m; sourceTree = "<group>"; };
+		B3C3F0D221A88FF0000DC7C8 /* CHCircularBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHCircularBuffer.h; sourceTree = "<group>"; };
+		B3C3F0D321A88FF0000DC7C8 /* CHCircularBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHCircularBuffer.m; sourceTree = "<group>"; };
+		B3C3F0D621A88FFD000DC7C8 /* CHOrderedDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHOrderedDictionary.m; sourceTree = "<group>"; };
+		B3C3F0D721A88FFD000DC7C8 /* CHOrderedDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHOrderedDictionary.h; sourceTree = "<group>"; };
 		OBJ_10 /* DecodingErrorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodingErrorExtension.swift; sourceTree = "<group>"; };
 		OBJ_11 /* XMLDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XMLDecoder.swift; sourceTree = "<group>"; };
 		OBJ_12 /* XMLDecodingStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XMLDecodingStorage.swift; sourceTree = "<group>"; };
@@ -95,6 +112,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B3C3F0C821A88F27000DC7C8 /* CHDataStructures */ = {
+			isa = PBXGroup;
+			children = (
+				B3C3F0D721A88FFD000DC7C8 /* CHOrderedDictionary.h */,
+				B3C3F0D621A88FFD000DC7C8 /* CHOrderedDictionary.m */,
+				B3C3F0D221A88FF0000DC7C8 /* CHCircularBuffer.h */,
+				B3C3F0D321A88FF0000DC7C8 /* CHCircularBuffer.m */,
+				B3C3F0CE21A88FDF000DC7C8 /* Util.h */,
+				B3C3F0CF21A88FDF000DC7C8 /* Util.m */,
+				B3C3F0CB21A88F89000DC7C8 /* CHMutableDictionary.h */,
+				B3C3F0CA21A88F89000DC7C8 /* CHMutableDictionary.m */,
+				B3C3F0C921A88F88000DC7C8 /* XMLParsing-Bridging-Header.h */,
+			);
+			path = CHDataStructures;
+			sourceTree = "<group>";
+		};
 		OBJ_15 /* Encoder */ = {
 			isa = PBXGroup;
 			children = (
@@ -155,6 +188,7 @@
 		OBJ_8 /* XMLParsing */ = {
 			isa = PBXGroup;
 			children = (
+				B3C3F0C821A88F27000DC7C8 /* CHDataStructures */,
 				OBJ_9 /* Decoder */,
 				OBJ_15 /* Encoder */,
 				OBJ_20 /* ISO8601DateFormatter.swift */,
@@ -236,10 +270,10 @@
 				LastUpgradeCheck = 9999;
 				TargetAttributes = {
 					"XMLParsing::XMLParsing" = {
-						LastSwiftMigration = 1000;
+						LastSwiftMigration = 0940;
 					};
 					"XMLParsing::XMLParsingTests" = {
-						LastSwiftMigration = 1000;
+						LastSwiftMigration = 0940;
 					};
 				};
 			};
@@ -277,6 +311,10 @@
 			buildActionMask = 0;
 			files = (
 				OBJ_41 /* XMLParsingTests.swift in Sources */,
+				B3C3F0CC21A88F89000DC7C8 /* CHMutableDictionary.m in Sources */,
+				B3C3F0D021A88FDF000DC7C8 /* Util.m in Sources */,
+				B3C3F0D821A88FFD000DC7C8 /* CHOrderedDictionary.m in Sources */,
+				B3C3F0D421A88FF1000DC7C8 /* CHCircularBuffer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -289,8 +327,12 @@
 				OBJ_52 /* XMLDecodingStorage.swift in Sources */,
 				OBJ_53 /* XMLKeyedDecodingContainer.swift in Sources */,
 				OBJ_54 /* XMLUnkeyedDecodingContainer.swift in Sources */,
+				B3C3F0D121A88FDF000DC7C8 /* Util.m in Sources */,
+				B3C3F0D921A88FFD000DC7C8 /* CHOrderedDictionary.m in Sources */,
 				OBJ_55 /* EncodingErrorExtension.swift in Sources */,
 				OBJ_56 /* XMLEncoder.swift in Sources */,
+				B3C3F0D521A88FF1000DC7C8 /* CHCircularBuffer.m in Sources */,
+				B3C3F0CD21A88F89000DC7C8 /* CHMutableDictionary.m in Sources */,
 				OBJ_57 /* XMLEncodingStorage.swift in Sources */,
 				OBJ_58 /* XMLReferencingEncoder.swift in Sources */,
 				OBJ_59 /* ISO8601DateFormatter.swift in Sources */,
@@ -361,6 +403,7 @@
 		OBJ_38 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -371,6 +414,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Sources/XMLParsing/CHDataStructures/XMLParsing-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
 				TARGET_NAME = XMLParsingTests;
 			};
@@ -379,6 +424,7 @@
 		OBJ_39 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -389,6 +435,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Sources/XMLParsing/CHDataStructures/XMLParsing-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 				TARGET_NAME = XMLParsingTests;
 			};
@@ -420,6 +467,8 @@
 		OBJ_47 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				DEFINES_MODULE = YES;
 				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -434,6 +483,8 @@
 				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Sources/XMLParsing/CHDataStructures/XMLParsing-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
 				TARGET_NAME = XMLParsing;
 			};
@@ -442,6 +493,8 @@
 		OBJ_48 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				DEFINES_MODULE = YES;
 				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -456,6 +509,7 @@
 				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Sources/XMLParsing/CHDataStructures/XMLParsing-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 				TARGET_NAME = XMLParsing;
 			};
