@@ -37,7 +37,13 @@
 
 - (id) init;
 - (id) initWithArray:(NSArray*)anArray;
+
+// This is the designated initializer for CHCircularBuffer.
 - (id) initWithCapacity:(NSUInteger)capacity NS_DESIGNATED_INITIALIZER;
+
+#pragma mark <NSCoding>
+
+- (id) initWithCoder:(NSCoder*)decoder;
 
 - (NSArray*) allObjects;
 - (BOOL) containsObject:(id)anObject;

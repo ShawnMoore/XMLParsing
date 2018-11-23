@@ -29,8 +29,8 @@ internal struct _XMLEncodingStorage {
         return self.containers.count
     }
     
-    internal mutating func pushKeyedContainer() -> NSMutableDictionary {
-        let dictionary = NSMutableDictionary()
+    internal mutating func pushKeyedContainer() -> CHOrderedDictionary {
+        let dictionary = CHOrderedDictionary()
         self.containers.append(dictionary)
         return dictionary
     }

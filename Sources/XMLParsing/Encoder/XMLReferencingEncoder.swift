@@ -21,7 +21,7 @@ internal class _XMLReferencingEncoder : _XMLEncoder {
         case array(NSMutableArray, Int)
         
         /// Referencing a specific key in a dictionary container.
-        case dictionary(NSMutableDictionary, String)
+        case dictionary(CHOrderedDictionary, String)
     }
     
     // MARK: - Properties
@@ -56,7 +56,7 @@ internal class _XMLReferencingEncoder : _XMLEncoder {
         referencing encoder: _XMLEncoder,
         key: CodingKey,
         convertedKey: CodingKey,
-        wrapping dictionary: NSMutableDictionary
+        wrapping dictionary: CHOrderedDictionary
     ) {
         self.encoder = encoder
         self.reference = .dictionary(dictionary, convertedKey.stringValue)

@@ -23,7 +23,7 @@ void CHDictionaryRelease(CFAllocatorRef allocator, const void *value) {
 }
 
 CFStringRef CHDictionaryCopyDescription(const void *value) {
-	return (CFStringRef)[[(id)value description] copy];
+	return (CFStringRef)[[(id)value description] copy]; 
 }
 
 Boolean CHDictionaryEqual(const void *value1, const void *value2) {
@@ -72,13 +72,13 @@ HIDDEN void createCollectableCFMutableDictionary(CFMutableDictionaryRef* diction
 }
 
 // Note: Defined here since -init is not implemented in NS(Mutable)Dictionary.
-- (id) init {
+- (nonnull instancetype) init {
 	return [self initWithCapacity:0]; // The 0 means we provide no capacity hint
 }
 
 // Note: This is the designated initializer for NSMutableDictionary and this class.
 // Subclasses may override this as necessary, but must call back here first.
-- (id) initWithCapacity:(NSUInteger)numItems {
+- (nonnull instancetype) initWithCapacity:(NSUInteger)numItems {
 	if ((self = [super init]) == nil) return nil;
 	createCollectableCFMutableDictionary(&dictionary, numItems);
 	return self;
@@ -91,7 +91,7 @@ HIDDEN void createCollectableCFMutableDictionary(CFMutableDictionaryRef* diction
 	return [self class];
 }
 
-- (id) initWithCoder:(NSCoder*)decoder {
+- (nullable instancetype) initWithCoder:(NSCoder*)decoder {
 	return [self initWithDictionary:[decoder decodeObjectForKey:@"dictionary"]];
 }
 
