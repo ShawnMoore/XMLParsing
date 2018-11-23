@@ -21,13 +21,9 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		B3C3F0CC21A88F89000DC7C8 /* CHMutableDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = B3C3F0CA21A88F89000DC7C8 /* CHMutableDictionary.m */; };
 		B3C3F0CD21A88F89000DC7C8 /* CHMutableDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = B3C3F0CA21A88F89000DC7C8 /* CHMutableDictionary.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		B3C3F0D021A88FDF000DC7C8 /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = B3C3F0CF21A88FDF000DC7C8 /* Util.m */; };
 		B3C3F0D121A88FDF000DC7C8 /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = B3C3F0CF21A88FDF000DC7C8 /* Util.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		B3C3F0D421A88FF1000DC7C8 /* CHCircularBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = B3C3F0D321A88FF0000DC7C8 /* CHCircularBuffer.m */; };
 		B3C3F0D521A88FF1000DC7C8 /* CHCircularBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = B3C3F0D321A88FF0000DC7C8 /* CHCircularBuffer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		B3C3F0D821A88FFD000DC7C8 /* CHOrderedDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = B3C3F0D621A88FFD000DC7C8 /* CHOrderedDictionary.m */; };
 		B3C3F0D921A88FFD000DC7C8 /* CHOrderedDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = B3C3F0D621A88FFD000DC7C8 /* CHOrderedDictionary.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		OBJ_35 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
 		OBJ_41 /* XMLParsingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_25 /* XMLParsingTests.swift */; };
@@ -311,10 +307,6 @@
 			buildActionMask = 0;
 			files = (
 				OBJ_41 /* XMLParsingTests.swift in Sources */,
-				B3C3F0CC21A88F89000DC7C8 /* CHMutableDictionary.m in Sources */,
-				B3C3F0D021A88FDF000DC7C8 /* Util.m in Sources */,
-				B3C3F0D821A88FFD000DC7C8 /* CHOrderedDictionary.m in Sources */,
-				B3C3F0D421A88FF1000DC7C8 /* CHCircularBuffer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

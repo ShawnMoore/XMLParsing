@@ -58,13 +58,13 @@ internal class _XMLElement {
     var key: String
     var value: String? = nil
     var attributes: [String: String] = [:]
-    var children: [String: [_XMLElement]] = [:]
+    var children = CHOrderedDictionary()
     
     internal init(key: String, value: String? = nil, attributes: [String: String] = [:], children: [String: [_XMLElement]] = [:]) {
         self.key = key
         self.value = value
         self.attributes = attributes
-        self.children = children
+        self.children = CHOrderedDictionary(dictionary: children)
     }
     
     convenience init(key: String, value: Optional<CustomStringConvertible>, attributes: [String: CustomStringConvertible] = [:]) {
@@ -117,7 +117,7 @@ internal class _XMLElement {
         }
         
         if let parentElement = parentElement, let key = key {
-            parentElement.children[key] = (parentElement.children[key] ?? []) + [element]
+            parentElement.children[key] = (parentElement.children[key] as! [_XMLElement]? ?? []) + [element]
         }
     }
     
@@ -140,46 +140,48 @@ internal class _XMLElement {
     
     fileprivate static func createElement(parentElement: _XMLElement, key: String, object: NSNumber) {
         let element = _XMLElement(key: key, value: object.description)
-        parentElement.children[key] = (parentElement.children[key] ?? []) + [element]
+        parentElement.children[key] = (parentElement.children[key] as! [_XMLElement]? ?? []) + [element]
     }
     
     fileprivate static func createElement(parentElement: _XMLElement, key: String, object: NSString) {
         let element = _XMLElement(key: key, value: object.description)
-        parentElement.children[key] = (parentElement.children[key] ?? []) + [element]
+        parentElement.children[key] = (parentElement.children[key] as! [_XMLElement]? ?? []) + [element]
     }
     
     fileprivate static func createElement(parentElement: _XMLElement, key: String, object: NSNull) {
         let element = _XMLElement(key: key)
-        parentElement.children[key] = (parentElement.children[key] ?? []) + [element]
+        parentElement.children[key] = (parentElement.children[key] as! [_XMLElement]? ?? []) + [element]
     }
     
     fileprivate func flatten() -> [String: Any] {
         var node: [String: Any] = attributes
         
         for childElement in children {
-            for child in childElement.value {
+            let value = childElement.value as! [_XMLElement]
+            let key = childElement.key as! String
+            for child in value {
                 if let content = child.value {
-                    if let oldContent = node[childElement.key] as? Array<Any> {
-                        node[childElement.key] = oldContent + [content]
+                    if let oldContent = node[key] as? Array<Any> {
+                        node[key] = oldContent + [content]
                         
-                    } else if let oldContent = node[childElement.key] {
-                        node[childElement.key] = [oldContent, content]
+                    } else if let oldContent = node[key] {
+                        node[key] = [oldContent, content]
                         
                     } else {
-                        node[childElement.key] = content
+                        node[key] = content
                     }
-                } else if !child.children.isEmpty || !child.attributes.isEmpty {
+                } else if child.children.count() > 0 || !child.attributes.isEmpty {
                     let newValue = child.flatten()
                     
-                    if let existingValue = node[childElement.key] {
+                    if let existingValue = node[key] {
                         if var array = existingValue as? Array<Any> {
                             array.append(newValue)
-                            node[childElement.key] = array
+                            node[key] = array
                         } else {
-                            node[childElement.key] = [existingValue, newValue]
+                            node[key] = [existingValue, newValue]
                         }
                     } else {
-                        node[childElement.key] = newValue
+                        node[key] = newValue
                     }
                 }
             }
@@ -214,11 +216,11 @@ internal class _XMLElement {
                 string += "\(value)"
             }
             string += "</\(key)>"
-        } else if !children.isEmpty {
+        } else if children.count() > 0 {
             string += prettyPrinted ? ">\n" : ">"
             
             for childElement in children {
-                for child in childElement.value {
+                for child in childElement.value as! [_XMLElement] {
                     string += child._toXMLString(indented: level + 1, withCDATA: cdata, formatting: formatting)
                     string += prettyPrinted ? "\n" : ""
                 }
@@ -292,8 +294,9 @@ internal class _XMLStackParser: NSObject, XMLParserDelegate {
         stack.append(node)
         
         if let currentNode = currentNode {
-            if currentNode.children[elementName] != nil {
-                currentNode.children[elementName]?.append(node)
+            if var childArray = currentNode.children[elementName] as? [_XMLElement] {
+                childArray.append(node)
+                currentNode.children[elementName] = childArray
             } else {
                 currentNode.children[elementName] = [node]
             }
