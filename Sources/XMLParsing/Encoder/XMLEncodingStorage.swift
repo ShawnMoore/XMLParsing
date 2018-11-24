@@ -8,6 +8,7 @@
 //
 
 import Foundation
+import XMLParsingPrivate
 
 // MARK: - Encoding Storage and Containers
 

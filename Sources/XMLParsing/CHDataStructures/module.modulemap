@@ -1,0 +1,4 @@
+module XMLParsingPrivate {
+    header "CHOrderedDictionary.h"
+    export *
+}

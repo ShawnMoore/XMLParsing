@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import XMLParsingPrivate
 
 //===----------------------------------------------------------------------===//
 // Data Representation
