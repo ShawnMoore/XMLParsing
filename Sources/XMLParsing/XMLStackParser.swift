@@ -161,17 +161,7 @@ internal class _XMLElement {
             let value = childElement.value as! [_XMLElement]
             let key = childElement.key as! String
             for child in value {
-                if let content = child.value {
-                    if let oldContent = node[key] as? Array<Any> {
-                        node[key] = oldContent + [content]
-                        
-                    } else if let oldContent = node[key] {
-                        node[key] = [oldContent, content]
-                        
-                    } else {
-                        node[key] = content
-                    }
-                } else if child.children.count() > 0 || !child.attributes.isEmpty {
+                if child.children.count() > 0 || !child.attributes.isEmpty {
                     let newValue = child.flatten()
                     
                     if let existingValue = node[key] {
@@ -183,6 +173,16 @@ internal class _XMLElement {
                         }
                     } else {
                         node[key] = newValue
+                    }
+                } else if let content = child.value {
+                    if let oldContent = node[key] as? Array<Any> {
+                        node[key] = oldContent + [content]
+                        
+                    } else if let oldContent = node[key] {
+                        node[key] = [oldContent, content]
+                        
+                    } else {
+                        node[key] = content
                     }
                 }
             }
@@ -237,6 +237,10 @@ internal class _XMLElement {
     }
 }
 
+enum XmlNamespace: String {
+    case xsi = "http://www.w3.org/2001/XMLSchema-instance"
+}
+
 extension String {
     internal func escape(_ characterSet: [(character: String, escapedCharacter: String)]) -> String {
         var string = self
@@ -249,6 +253,8 @@ extension String {
     }
 }
 
+
+
 internal class _XMLStackParser: NSObject, XMLParserDelegate {
     var root: _XMLElement?
     var stack = [_XMLElement]()
@@ -256,6 +262,11 @@ internal class _XMLStackParser: NSObject, XMLParserDelegate {
     
     var currentElementName: String?
     var currentElementData = ""
+    
+    var nsPrefix = [String: String]()
+    var prefixNs = [String: String]()
+    
+
     
     static func parse(with data: Data) throws -> [String: Any] {
         let parser = _XMLStackParser()
@@ -274,6 +285,8 @@ internal class _XMLStackParser: NSObject, XMLParserDelegate {
     func parse(with data: Data) throws -> _XMLElement?  {
         let xmlParser = XMLParser(data: data)
         xmlParser.delegate = self
+        xmlParser.shouldProcessNamespaces = true
+        xmlParser.shouldReportNamespacePrefixes = true
         
         if xmlParser.parse() {
             return root
@@ -282,6 +295,11 @@ internal class _XMLStackParser: NSObject, XMLParserDelegate {
         } else {
             return nil
         }
+    }
+    
+    private func popValueOf(attr: String, ns: XmlNamespace, from dict: inout [String: String]) -> String? {
+        guard let prefix = nsPrefix[ns.rawValue] else { return nil }
+        return dict.removeValue(forKey: "\(prefix):\(attr)")
     }
     
     func parserDidStartDocument(_ parser: XMLParser) {
@@ -307,12 +325,13 @@ internal class _XMLStackParser: NSObject, XMLParserDelegate {
     
     func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
         if let poppedNode = stack.popLast(){
-            if let content = poppedNode.value?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) {
-                if content.isEmpty {
-                    poppedNode.value = nil
-                } else {
-                    poppedNode.value = content
-                }
+            if let nilAttr = popValueOf(attr: "nil", ns: .xsi, from: &poppedNode.attributes), nilAttr == "true" {
+                poppedNode.value = nil
+            } else if let content = poppedNode.value?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) {
+                poppedNode.value = content
+            } else {
+                // an element which is present must be at least empty
+                poppedNode.value = ""
             }
             
             if (stack.isEmpty) {
@@ -321,6 +340,17 @@ internal class _XMLStackParser: NSObject, XMLParserDelegate {
             } else {
                 currentNode = stack.last
             }
+        }
+    }
+    
+    func parser(_ parser: XMLParser, didStartMappingPrefix prefix: String, toURI namespaceURI: String) {
+        prefixNs[prefix] = namespaceURI
+        nsPrefix[namespaceURI] = prefix
+    }
+    
+    func parser(_ parser: XMLParser, didEndMappingPrefix prefix: String) {
+        if let uri = prefixNs.removeValue(forKey: prefix) {
+            nsPrefix.removeValue(forKey: uri)
         }
     }
     

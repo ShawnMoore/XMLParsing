@@ -147,6 +147,20 @@ extension Book {
     }
 }
 
+
+let nilXml = """
+<root xmlns:xswhatever="http://www.w3.org/2001/XMLSchema-instance">
+<empty></empty>
+<null xswhatever:nil="true"></null>
+</root>
+"""
+
+struct NullTest: Decodable {
+    let empty: String
+    let null: String?
+}
+
+
 class XMLParsingTests: XCTestCase {
     func testExample() {
         do {
@@ -158,6 +172,21 @@ class XMLParsingTests: XCTestCase {
             let rels = try decoder.decode(Relationships.self, from: data)
 
             XCTAssertEqual(rels.items[0].id, "rId1")
+        } catch {
+            XCTAssert(false, "failed to decode the example: \(error)")
+        }
+    }
+    
+    func testNull() {
+        do {
+            guard let data = nilXml.data(using: .utf8) else { return }
+            
+            let decoder = XMLDecoder()
+            
+            let null = try decoder.decode(NullTest.self, from: data)
+            
+            XCTAssertEqual(null.empty, "")
+            XCTAssertNil(null.null)
         } catch {
             XCTAssert(false, "failed to decode the example: \(error)")
         }
