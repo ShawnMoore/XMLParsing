@@ -161,6 +161,20 @@ struct NullTest: Decodable {
 }
 
 
+let uppercasedXml = """
+<ROOT xmlns:xswhatever="http://www.w3.org/2001/XMLSchema-instance">
+<NON_EMPTY_VALUE>value</NON_EMPTY_VALUE>
+<WHATS_UP_YO xswhatever:nil="true"></WHATS_UP_YO>
+</ROOT>
+"""
+
+struct UpperTest: Codable {
+    let nonEmptyValue: String
+    let whatsUpYo: String?
+}
+
+
+
 class XMLParsingTests: XCTestCase {
     func testExample() {
         do {
@@ -189,6 +203,33 @@ class XMLParsingTests: XCTestCase {
             XCTAssertNil(null.null)
         } catch {
             XCTAssert(false, "failed to decode the example: \(error)")
+        }
+    }
+    
+    func testUppercase() {
+        do {
+            guard let data = uppercasedXml.data(using: .utf8) else { return }
+            
+            let decoder = XMLDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeUpperCase
+            
+            let test = try decoder.decode(UpperTest.self, from: data)
+            
+            XCTAssertEqual(test.nonEmptyValue, "value")
+            XCTAssertNil(test.whatsUpYo)
+            
+            let encoder = XMLEncoder()
+            
+            encoder.keyEncodingStrategy = .convertToSnakeUpperCase
+            
+            let newData = try encoder.encode(test, withRootKey: "ROOT")
+            
+            let xmlText = String(data: newData, encoding: .utf8)!
+            
+            print(xmlText)
+            
+        } catch {
+            XCTAssert(false, "failed to decode / encode the example: \(error)")
         }
     }
 

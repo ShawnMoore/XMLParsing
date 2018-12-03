@@ -120,6 +120,9 @@ open class XMLDecoder {
         ///
         /// - Note: Using a key decoding strategy has a nominal performance cost, as each string key has to be inspected for the `_` character.
         case convertFromSnakeCase
+        
+        /// Convert from "SNAKE_CASE_KEYS" to "camelCaseKeys"
+        case convertFromSnakeUpperCase
 
         /// Convert from "CodingKey" to "codingKey"
         case convertFromCapitalized
@@ -137,8 +140,10 @@ open class XMLDecoder {
             return result
         }
         
-        static func _convertFromSnakeCase(_ stringKey: String) -> String {
-            guard !stringKey.isEmpty else { return stringKey }
+        static func _convertFromSnakeCase(_ originalStringKey: String, snakeUpperCase: Bool) -> String {
+            guard !originalStringKey.isEmpty else { return originalStringKey }
+            
+            let stringKey = snakeUpperCase ? originalStringKey.lowercased() : originalStringKey
             
             // Find the first non-underscore character
             guard let firstNonUnderscore = stringKey.index(where: { $0 != "_" }) else {

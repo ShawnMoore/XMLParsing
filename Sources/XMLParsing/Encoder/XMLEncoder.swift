@@ -117,14 +117,17 @@ open class XMLEncoder {
         /// For example, `oneTwoThree` becomes `one_two_three`. `_oneTwoThree_` becomes `_one_two_three_`.
         ///
         /// - Note: Using a key encoding strategy has a nominal performance cost, as each string key has to be converted.
-        case convertToSnakeCase
+        case convertToSnakeLowerCase
+        
+        /// Convert from "camelCaseKeys" to "SNAKE_CASE_KEYS" before writing a key to XML payload.
+        case convertToSnakeUpperCase
         
         /// Provide a custom conversion to the key in the encoded XML from the keys specified by the encoded types.
         /// The full path to the current encoding position is provided for context (in case you need to locate this key within the payload). The returned key is used in place of the last component in the coding path before encoding.
         /// If the result of the conversion is a duplicate key, then only one value will be present in the result.
         case custom((_ codingPath: [CodingKey]) -> CodingKey)
         
-        internal static func _convertToSnakeCase(_ stringKey: String) -> String {
+        internal static func _convertToSnakeCase(_ stringKey: String, uppercased: Bool) -> String {
             guard !stringKey.isEmpty else { return stringKey }
             
             var words : [Range<String.Index>] = []
@@ -168,7 +171,7 @@ open class XMLEncoder {
             }
             words.append(wordStart..<searchRange.upperBound)
             let result = words.map({ (range) in
-                return stringKey[range].lowercased()
+                return uppercased ? stringKey[range].uppercased() : stringKey[range].lowercased()
             }).joined(separator: "_")
             return result
         }
@@ -397,11 +400,15 @@ fileprivate struct _XMLKeyedEncodingContainer<K : CodingKey> : KeyedEncodingCont
     // MARK: - Coding Path Operations
     
     private func _converted(_ key: CodingKey) -> CodingKey {
+        var snakeUppercased = false
         switch encoder.options.keyEncodingStrategy {
         case .useDefaultKeys:
             return key
-        case .convertToSnakeCase:
-            let newKeyString = XMLEncoder.KeyEncodingStrategy._convertToSnakeCase(key.stringValue)
+        case .convertToSnakeUpperCase:
+            snakeUppercased = true
+            fallthrough
+        case .convertToSnakeLowerCase:
+            let newKeyString = XMLEncoder.KeyEncodingStrategy._convertToSnakeCase(key.stringValue, uppercased: snakeUppercased)
             return _XMLKey(stringValue: newKeyString, intValue: key.intValue)
         case .custom(let converter):
             return converter(codingPath + [key])
