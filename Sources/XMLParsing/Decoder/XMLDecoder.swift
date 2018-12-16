@@ -435,11 +435,11 @@ extension _XMLDecoder {
         
         guard let string = value as? String else { return nil }
         
-        guard let value = Float(string) else {
+        guard let value = Decimal(string: string) else {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: string)
         }
         
-        let number = NSNumber(value: value)
+        let number = NSDecimalNumber(decimal: value)
         
         guard number !== kCFBooleanTrue, number !== kCFBooleanFalse else {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: value)
@@ -458,11 +458,11 @@ extension _XMLDecoder {
         
         guard let string = value as? String else { return nil }
         
-        guard let value = Float(string) else {
+        guard let value = Decimal(string: string) else {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: string)
         }
         
-        let number = NSNumber(value: value)
+        let number = NSDecimalNumber(decimal: value)
         
         guard number !== kCFBooleanTrue, number !== kCFBooleanFalse else {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: value)
@@ -481,11 +481,11 @@ extension _XMLDecoder {
         
         guard let string = value as? String else { return nil }
         
-        guard let value = Float(string) else {
+        guard let value = Decimal(string: string) else {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: string)
         }
         
-        let number = NSNumber(value: value)
+        let number = NSDecimalNumber(decimal: value)
         
         guard number !== kCFBooleanTrue, number !== kCFBooleanFalse else {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: value)
@@ -504,11 +504,11 @@ extension _XMLDecoder {
         
         guard let string = value as? String else { return nil }
         
-        guard let value = Float(string) else {
+        guard let value = Decimal(string: string) else {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: string)
         }
         
-        let number = NSNumber(value: value)
+        let number = NSDecimalNumber(decimal: value)
         
         guard number !== kCFBooleanTrue, number !== kCFBooleanFalse else {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: value)
@@ -527,11 +527,11 @@ extension _XMLDecoder {
         
         guard let string = value as? String else { return nil }
         
-        guard let value = Float(string) else {
+        guard let value = Decimal(string: string) else {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: string)
         }
         
-        let number = NSNumber(value: value)
+        let number = NSDecimalNumber(decimal: value)
         
         guard number !== kCFBooleanTrue, number !== kCFBooleanFalse else {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: value)
@@ -550,11 +550,11 @@ extension _XMLDecoder {
         
         guard let string = value as? String else { return nil }
         
-        guard let value = Float(string) else {
+        guard let value = Decimal(string: string) else {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: string)
         }
         
-        let number = NSNumber(value: value)
+        let number = NSDecimalNumber(decimal: value)
         
         guard number !== kCFBooleanTrue, number !== kCFBooleanFalse else {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: value)
@@ -573,11 +573,11 @@ extension _XMLDecoder {
         
         guard let string = value as? String else { return nil }
         
-        guard let value = Float(string) else {
+        guard let value = Decimal(string: string) else {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: string)
         }
         
-        let number = NSNumber(value: value)
+        let number = NSDecimalNumber(decimal: value)
         
         guard number !== kCFBooleanTrue, number !== kCFBooleanFalse else {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: value)
@@ -596,11 +596,11 @@ extension _XMLDecoder {
         
         guard let string = value as? String else { return nil }
         
-        guard let value = Float(string) else {
+        guard let value = Decimal(string: string) else {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: string)
         }
         
-        let number = NSNumber(value: value)
+        let number = NSDecimalNumber(decimal: value)
         
         guard number !== kCFBooleanTrue, number !== kCFBooleanFalse else {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: value)
@@ -619,11 +619,11 @@ extension _XMLDecoder {
         
         guard let string = value as? String else { return nil }
         
-        guard let value = Float(string) else {
+        guard let value = Decimal(string: string) else {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: string)
         }
         
-        let number = NSNumber(value: value)
+        let number = NSDecimalNumber(decimal: value)
         
         guard number !== kCFBooleanTrue, number !== kCFBooleanFalse else {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: value)
@@ -642,11 +642,11 @@ extension _XMLDecoder {
         
         guard let string = value as? String else { return nil }
         
-        guard let value = Float(string) else {
+        guard let value = Decimal(string: string) else {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: string)
         }
         
-        let number = NSNumber(value: value)
+        let number = NSDecimalNumber(decimal: value)
         
         guard number !== kCFBooleanTrue, number !== kCFBooleanFalse else {
             throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: value)
@@ -784,6 +784,8 @@ extension _XMLDecoder {
                 throw DecodingError._typeMismatch(at: self.codingPath, expectation: type, reality: value)
             }
             
+            guard !string.isEmpty else { return Data() }
+            
             guard let data = Data(base64Encoded: string) else {
                 throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: self.codingPath, debugDescription: "Encountered Data is not valid Base64."))
             }
@@ -803,8 +805,8 @@ extension _XMLDecoder {
         // Attempt to bridge from NSDecimalNumber.
         let doubleValue = try self.unbox(value, as: Double.self)!
         return Decimal(doubleValue)
-    }
-    
+        }
+        
     internal func unbox<T : Decodable>(_ value: Any, as type: T.Type) throws -> T? {
         let decoded: T
         if type == Date.self || type == NSDate.self {
@@ -827,13 +829,13 @@ extension _XMLDecoder {
         } else if type == Decimal.self || type == NSDecimalNumber.self {
             guard let decimal = try self.unbox(value, as: Decimal.self) else { return nil }
             decoded = decimal as! T
-        } else {
-            self.storage.push(container: value)
-            defer { self.storage.popContainer() }
-            return try type.init(from: self)
-        }
-        
+                } else {
+                    self.storage.push(container: value)
+                    defer { self.storage.popContainer() }
+                    return try type.init(from: self)
+                }
+
         return decoded
+        }
     }
-}
 
