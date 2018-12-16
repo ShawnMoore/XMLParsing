@@ -29,14 +29,22 @@ internal struct _XMLKeyedDecodingContainer<K : CodingKey> : KeyedDecodingContain
     /// Initializes `self` by referencing the given decoder and container.
     internal init(referencing decoder: _XMLDecoder, wrapping container: [String : Any]) {
         self.decoder = decoder
+        var snakeUpperCase = false
         switch decoder.options.keyDecodingStrategy {
         case .useDefaultKeys:
             self.container = container
+        case .convertFromSnakeUpperCase:
+            snakeUpperCase = true
+            fallthrough
         case .convertFromSnakeCase:
             // Convert the snake case keys in the container to camel case.
             // If we hit a duplicate key after conversion, then we'll use the first one we saw. Effectively an undefined behavior with dictionaries.
             self.container = Dictionary(container.map {
-                key, value in (XMLDecoder.KeyDecodingStrategy._convertFromSnakeCase(key), value)
+                key, value in (XMLDecoder.KeyDecodingStrategy._convertFromSnakeCase(key, snakeUpperCase: snakeUpperCase), value)
+            }, uniquingKeysWith: { (first, _) in first })
+        case .convertFromCapitalized:
+            self.container = Dictionary(container.map {
+                key, value in (XMLDecoder.KeyDecodingStrategy._convertFromCapitalized(key), value)
             }, uniquingKeysWith: { (first, _) in first })
         case .custom(let converter):
             self.container = Dictionary(container.map {
@@ -57,11 +65,15 @@ internal struct _XMLKeyedDecodingContainer<K : CodingKey> : KeyedDecodingContain
     }
     
     private func _errorDescription(of key: CodingKey) -> String {
+        var uppercase = false
         switch decoder.options.keyDecodingStrategy {
+        case .convertFromSnakeUpperCase:
+            uppercase = true
+            fallthrough
         case .convertFromSnakeCase:
             // In this case we can attempt to recover the original value by reversing the transform
             let original = key.stringValue
-            let converted = XMLEncoder.KeyEncodingStrategy._convertToSnakeCase(original)
+            let converted = XMLEncoder.KeyEncodingStrategy._convertToSnakeCase(original, uppercased: uppercase)
             if converted == original {
                 return "\(key) (\"\(original)\")"
             } else {

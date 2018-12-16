@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import XMLParsingPrivate
 
 //===----------------------------------------------------------------------===//
 // Data Representation
@@ -14,17 +15,13 @@ import Foundation
 
 public struct XMLHeader {
     /// the XML standard that the produced document conforms to.
-    var version: Double? = nil
+    public let version: Double?
     /// the encoding standard used to represent the characters in the produced document.
-    var encoding: String? = nil
-    /// indicates whetehr a document relies on information from an external source.
-    var standalone: String? = nil
-    
-    init(version: Double? = nil) {
-        self.version = version
-    }
-    
-    init(version: Double?, encoding: String?, standalone: String? = nil) {
+    public let encoding: String?
+    /// indicates whether a document relies on information from an external source.
+    public let standalone: String?
+
+    public init(version: Double? = nil, encoding: String? = nil, standalone: String? = nil) {
         self.version = version
         self.encoding = encoding
         self.standalone = standalone
@@ -62,13 +59,13 @@ internal class _XMLElement {
     var key: String
     var value: String? = nil
     var attributes: [String: String] = [:]
-    var children: [String: [_XMLElement]] = [:]
+    var children = CHOrderedDictionary()
     
     internal init(key: String, value: String? = nil, attributes: [String: String] = [:], children: [String: [_XMLElement]] = [:]) {
         self.key = key
         self.value = value
         self.attributes = attributes
-        self.children = children
+        self.children = CHOrderedDictionary(dictionary: children)
     }
     
     convenience init(key: String, value: Optional<CustomStringConvertible>, attributes: [String: CustomStringConvertible] = [:]) {
@@ -121,7 +118,7 @@ internal class _XMLElement {
         }
         
         if let parentElement = parentElement, let key = key {
-            parentElement.children[key] = (parentElement.children[key] ?? []) + [element]
+            parentElement.children[key] = (parentElement.children[key] as! [_XMLElement]? ?? []) + [element]
         }
     }
     
@@ -144,46 +141,48 @@ internal class _XMLElement {
     
     fileprivate static func createElement(parentElement: _XMLElement, key: String, object: NSNumber) {
         let element = _XMLElement(key: key, value: object.description)
-        parentElement.children[key] = (parentElement.children[key] ?? []) + [element]
+        parentElement.children[key] = (parentElement.children[key] as! [_XMLElement]? ?? []) + [element]
     }
     
     fileprivate static func createElement(parentElement: _XMLElement, key: String, object: NSString) {
         let element = _XMLElement(key: key, value: object.description)
-        parentElement.children[key] = (parentElement.children[key] ?? []) + [element]
+        parentElement.children[key] = (parentElement.children[key] as! [_XMLElement]? ?? []) + [element]
     }
     
     fileprivate static func createElement(parentElement: _XMLElement, key: String, object: NSNull) {
         let element = _XMLElement(key: key)
-        parentElement.children[key] = (parentElement.children[key] ?? []) + [element]
+        parentElement.children[key] = (parentElement.children[key] as! [_XMLElement]? ?? []) + [element]
     }
     
-    func flatten() -> [String: Any] {
+    fileprivate func flatten() -> [String: Any] {
         var node: [String: Any] = attributes
         
         for childElement in children {
-            for child in childElement.value {
-                if let content = child.value {
-                    if let oldContent = node[childElement.key] as? Array<Any> {
-                        node[childElement.key] = oldContent + [content]
-                        
-                    } else if let oldContent = node[childElement.key] {
-                        node[childElement.key] = [oldContent, content]
-                        
-                    } else {
-                        node[childElement.key] = content
-                    }
-                } else if !child.children.isEmpty || !child.attributes.isEmpty {
+            let value = childElement.value as! [_XMLElement]
+            let key = childElement.key as! String
+            for child in value {
+                if child.children.count() > 0 || !child.attributes.isEmpty {
                     let newValue = child.flatten()
                     
-                    if let existingValue = node[childElement.key] {
+                    if let existingValue = node[key] {
                         if var array = existingValue as? Array<Any> {
                             array.append(newValue)
-                            node[childElement.key] = array
+                            node[key] = array
                         } else {
-                            node[childElement.key] = [existingValue, newValue]
+                            node[key] = [existingValue, newValue]
                         }
                     } else {
-                        node[childElement.key] = newValue
+                        node[key] = newValue
+                    }
+                } else if let content = child.value {
+                    if let oldContent = node[key] as? Array<Any> {
+                        node[key] = oldContent + [content]
+                        
+                    } else if let oldContent = node[key] {
+                        node[key] = [oldContent, content]
+                        
+                    } else {
+                        node[key] = content
                     }
                 }
             }
@@ -191,17 +190,19 @@ internal class _XMLElement {
         
         return node
     }
-    
-    func toXMLString(with header: XMLHeader? = nil, withCDATA cdata: Bool, ignoreEscaping: Bool = false) -> String {
+
+    func toXMLString(with header: XMLHeader? = nil, withCDATA cdata: Bool, formatting: XMLEncoder.OutputFormatting, ignoreEscaping: Bool = false) -> String {
         if let header = header, let headerXML = header.toXML() {
-            return headerXML + _toXMLString(withCDATA: cdata)
+            return headerXML + _toXMLString(withCDATA: cdata, formatting: formatting)
         } else {
-            return _toXMLString(withCDATA: cdata)
+            return _toXMLString(withCDATA: cdata, formatting: formatting)
         }
     }
     
-    fileprivate func _toXMLString(indented level: Int = 0, withCDATA cdata: Bool, ignoreEscaping: Bool = false) -> String {
-        var string = String(repeating: " ", count: level * 4)
+    fileprivate func _toXMLString(indented level: Int = 0, withCDATA cdata: Bool, formatting: XMLEncoder.OutputFormatting, ignoreEscaping: Bool = false) -> String {
+        let prettyPrinted = formatting.contains(.prettyPrinted)
+        let indentation = String(repeating: " ", count: (prettyPrinted ? level : 0) * 4)
+        var string = indentation
         string += "<\(key)"
         
         for (key, value) in attributes {
@@ -216,17 +217,17 @@ internal class _XMLElement {
                 string += "\(value)"
             }
             string += "</\(key)>"
-        } else if !children.isEmpty {
-            string += ">\n"
+        } else if children.count() > 0 {
+            string += prettyPrinted ? ">\n" : ">"
             
             for childElement in children {
-                for child in childElement.value {
-                    string += child._toXMLString(indented: level + 1, withCDATA: cdata)
-                    string += "\n"
+                for child in childElement.value as! [_XMLElement] {
+                    string += child._toXMLString(indented: level + 1, withCDATA: cdata, formatting: formatting)
+                    string += prettyPrinted ? "\n" : ""
                 }
             }
             
-            string += String(repeating: " ", count: level * 4)
+            string += indentation
             string += "</\(key)>"
         } else {
             string += " />"
@@ -236,8 +237,12 @@ internal class _XMLElement {
     }
 }
 
+enum XmlNamespace: String {
+    case xsi = "http://www.w3.org/2001/XMLSchema-instance"
+}
+
 extension String {
-    func escape(_ characterSet: [(character: String, escapedCharacter: String)]) -> String {
+    internal func escape(_ characterSet: [(character: String, escapedCharacter: String)]) -> String {
         var string = self
         
         for set in characterSet {
@@ -248,6 +253,8 @@ extension String {
     }
 }
 
+
+
 internal class _XMLStackParser: NSObject, XMLParserDelegate {
     var root: _XMLElement?
     var stack = [_XMLElement]()
@@ -255,6 +262,11 @@ internal class _XMLStackParser: NSObject, XMLParserDelegate {
     
     var currentElementName: String?
     var currentElementData = ""
+    
+    var nsPrefix = [String: String]()
+    var prefixNs = [String: String]()
+    
+
     
     static func parse(with data: Data) throws -> [String: Any] {
         let parser = _XMLStackParser()
@@ -273,6 +285,8 @@ internal class _XMLStackParser: NSObject, XMLParserDelegate {
     func parse(with data: Data) throws -> _XMLElement?  {
         let xmlParser = XMLParser(data: data)
         xmlParser.delegate = self
+        xmlParser.shouldProcessNamespaces = true
+        xmlParser.shouldReportNamespacePrefixes = true
         
         if xmlParser.parse() {
             return root
@@ -281,6 +295,11 @@ internal class _XMLStackParser: NSObject, XMLParserDelegate {
         } else {
             return nil
         }
+    }
+    
+    private func popValueOf(attr: String, ns: XmlNamespace, from dict: inout [String: String]) -> String? {
+        guard let prefix = nsPrefix[ns.rawValue] else { return nil }
+        return dict.removeValue(forKey: "\(prefix):\(attr)")
     }
     
     func parserDidStartDocument(_ parser: XMLParser) {
@@ -294,8 +313,9 @@ internal class _XMLStackParser: NSObject, XMLParserDelegate {
         stack.append(node)
         
         if let currentNode = currentNode {
-            if currentNode.children[elementName] != nil {
-                currentNode.children[elementName]?.append(node)
+            if var childArray = currentNode.children[elementName] as? [_XMLElement] {
+                childArray.append(node)
+                currentNode.children[elementName] = childArray
             } else {
                 currentNode.children[elementName] = [node]
             }
@@ -305,12 +325,13 @@ internal class _XMLStackParser: NSObject, XMLParserDelegate {
     
     func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
         if let poppedNode = stack.popLast(){
-            if let content = poppedNode.value?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) {
-                if content.isEmpty {
-                    poppedNode.value = nil
-                } else {
-                    poppedNode.value = content
-                }
+            if let nilAttr = popValueOf(attr: "nil", ns: .xsi, from: &poppedNode.attributes), nilAttr == "true" {
+                poppedNode.value = nil
+            } else if let content = poppedNode.value?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) {
+                poppedNode.value = content
+            } else {
+                // an element which is present must be at least empty
+                poppedNode.value = ""
             }
             
             if (stack.isEmpty) {
@@ -319,6 +340,17 @@ internal class _XMLStackParser: NSObject, XMLParserDelegate {
             } else {
                 currentNode = stack.last
             }
+        }
+    }
+    
+    func parser(_ parser: XMLParser, didStartMappingPrefix prefix: String, toURI namespaceURI: String) {
+        prefixNs[prefix] = namespaceURI
+        nsPrefix[namespaceURI] = prefix
+    }
+    
+    func parser(_ parser: XMLParser, didEndMappingPrefix prefix: String) {
+        if let uri = prefixNs.removeValue(forKey: prefix) {
+            nsPrefix.removeValue(forKey: uri)
         }
     }
     
