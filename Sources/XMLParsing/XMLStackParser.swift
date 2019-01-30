@@ -194,12 +194,10 @@ internal class _XMLElement {
                         node[childElement.key] = newValue
                     }
                 } else {
-                    print("found nil for \(child.key) element")
                     node[childElement.key] = [nil]
                 }
             }
         }
-        print("filtering node array")
         var filteredNodes: [String: Any] = [:]
         node.forEach { key, value in
             if let arr = value as? [Any?] {
