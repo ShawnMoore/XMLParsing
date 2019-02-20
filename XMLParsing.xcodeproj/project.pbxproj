@@ -21,7 +21,6 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		OBJ_35 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
 		OBJ_41 /* XMLParsingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_25 /* XMLParsingTests.swift */; };
 		OBJ_43 /* XMLParsing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "XMLParsing::XMLParsing::Product" /* XMLParsing.framework */; };
 		OBJ_50 /* DecodingErrorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* DecodingErrorExtension.swift */; };
@@ -178,20 +177,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		"XMLParsing::SwiftPMPackageDescription" /* XMLParsingPackageDescription */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = OBJ_31 /* Build configuration list for PBXNativeTarget "XMLParsingPackageDescription" */;
-			buildPhases = (
-				OBJ_34 /* Sources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = XMLParsingPackageDescription;
-			productName = XMLParsingPackageDescription;
-			productType = "com.apple.product-type.framework";
-		};
 		"XMLParsing::XMLParsing" /* XMLParsing */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = OBJ_46 /* Build configuration list for PBXNativeTarget "XMLParsing" */;
@@ -253,7 +238,6 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				"XMLParsing::SwiftPMPackageDescription" /* XMLParsingPackageDescription */,
 				"XMLParsing::XMLParsingTests" /* XMLParsingTests */,
 				"XMLParsing::XMLParsing" /* XMLParsing */,
 				"XMLParsing::XMLParsingPackageTests::ProductTarget" /* XMLParsingPackageTests */,
@@ -262,14 +246,6 @@
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
-		OBJ_34 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 0;
-			files = (
-				OBJ_35 /* Package.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		OBJ_40 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
@@ -334,26 +310,6 @@
 				USE_HEADERMAP = NO;
 			};
 			name = Debug;
-		};
-		OBJ_32 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD = /usr/bin/true;
-				OTHER_SWIFT_FLAGS = "-swift-version 4 -I /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/pm/4 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk";
-				SWIFT_VERSION = 4.0;
-			};
-			name = Debug;
-		};
-		OBJ_33 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD = /usr/bin/true;
-				OTHER_SWIFT_FLAGS = "-swift-version 4 -I /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/pm/4 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk";
-				SWIFT_VERSION = 4.0;
-			};
-			name = Release;
 		};
 		OBJ_38 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -477,15 +433,6 @@
 			buildConfigurations = (
 				OBJ_3 /* Debug */,
 				OBJ_4 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
-		OBJ_31 /* Build configuration list for PBXNativeTarget "XMLParsingPackageDescription" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				OBJ_32 /* Debug */,
-				OBJ_33 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
