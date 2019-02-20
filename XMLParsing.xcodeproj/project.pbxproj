@@ -55,6 +55,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C34F0FE8221D91550028E873 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		OBJ_10 /* DecodingErrorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodingErrorExtension.swift; sourceTree = "<group>"; };
 		OBJ_11 /* XMLDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XMLDecoder.swift; sourceTree = "<group>"; };
 		OBJ_12 /* XMLDecodingStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XMLDecodingStorage.swift; sourceTree = "<group>"; };
@@ -93,6 +94,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C34F0FE7221D91550028E873 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				C34F0FE8221D91550028E873 /* Info.plist */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		OBJ_15 /* Encoder */ = {
 			isa = PBXGroup;
 			children = (
@@ -152,11 +161,12 @@
 		OBJ_8 /* XMLParsing */ = {
 			isa = PBXGroup;
 			children = (
-				OBJ_9 /* Decoder */,
-				OBJ_15 /* Encoder */,
 				OBJ_20 /* ISO8601DateFormatter.swift */,
 				OBJ_21 /* XMLKey.swift */,
 				OBJ_22 /* XMLStackParser.swift */,
+				OBJ_9 /* Decoder */,
+				OBJ_15 /* Encoder */,
+				C34F0FE7221D91550028E873 /* Supporting Files */,
 			);
 			name = XMLParsing;
 			path = Sources/XMLParsing;
