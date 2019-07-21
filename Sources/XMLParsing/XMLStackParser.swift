@@ -57,7 +57,7 @@ public struct XMLHeader {
 
 internal class _XMLElement {
     static let attributesKey = "___ATTRIBUTES"
-    static let escapedCharacterSet = [("&", "&amp"), ("<", "&lt;"), (">", "&gt;"), ( "'", "&apos;"), ("\"", "&quot;")]
+    static let escapedCharacterSet = [("&", "&amp;"), ("<", "&lt;"), (">", "&gt;"), ( "'", "&apos;"), ("\"", "&quot;")]
     
     var key: String
     var value: String? = nil
