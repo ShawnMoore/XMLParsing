@@ -129,7 +129,7 @@ open class XMLDecoder {
             guard !stringKey.isEmpty else { return stringKey }
             
             // Find the first non-underscore character
-            guard let firstNonUnderscore = stringKey.index(where: { $0 != "_" }) else {
+			guard let firstNonUnderscore = stringKey.firstIndex(where: { $0 != "_" }) else {
                 // Reached the end without finding an _
                 return stringKey
             }
@@ -144,7 +144,7 @@ open class XMLDecoder {
             let leadingUnderscoreRange = stringKey.startIndex..<firstNonUnderscore
             let trailingUnderscoreRange = stringKey.index(after: lastNonUnderscore)..<stringKey.endIndex
             
-            var components = stringKey[keyRange].split(separator: "_")
+			let components = stringKey[keyRange].split(separator: "_")
             let joinedString : String
             if components.count == 1 {
                 // No underscores in key, leave the word as is - maybe already camel cased

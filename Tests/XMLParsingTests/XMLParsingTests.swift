@@ -9,7 +9,6 @@ class XMLParsingTests: XCTestCase {
 //        XCTAssertEqual(XMLParsing().text, "Hello, World!")
     }
 
-
     static var allTests = [
         ("testExample", testExample),
     ]
